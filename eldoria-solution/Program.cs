@@ -26,7 +26,16 @@ class Program
   /// <returns>A string containing the data fetched from the URL.</returns>
   static async Task<string> FetchDataFromUrl(string url)
   {
-    return await client.GetStringAsync(url);
+    try
+    {
+      return await client.GetStringAsync(url);
+    }
+    catch (HttpRequestException e)
+    {
+      Console.WriteLine("\nException Caught!");
+      Console.WriteLine("Message :{0} ", e.Message);
+      return string.Empty;
+    }
   }
 
   /// <summary>
@@ -53,6 +62,12 @@ class Program
   /// <param name="secrets">The list of secrets to print.</param>
   static void PrintSecrets(List<string> secrets)
   {
+    if (secrets.Count == 0)
+    {
+      Console.WriteLine("No secrets found.");
+      return;
+    }
+
     foreach (string secret in secrets)
     {
       Console.WriteLine(secret);
